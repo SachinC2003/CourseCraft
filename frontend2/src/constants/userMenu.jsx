@@ -11,7 +11,7 @@ const userMenu =[
     },
     {
         name : "Applay Classes",
-        path : "/classes",
+        path : "/applay",
         icon:'ri-home-line'
     },
     {

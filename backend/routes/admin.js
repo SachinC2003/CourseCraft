@@ -20,6 +20,8 @@ const users = require("..");
         return res.status(500).send({msg : "Admin not signup succsessfully", error : error});
     }
 })*/
+
+
 router.post("/signup", async (req, res) => {
     const { username, password } = req.body;
   

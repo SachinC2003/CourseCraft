@@ -6,6 +6,57 @@ const {User, Course} = require("../db/index")
 const userMiddleware = require("../middleware/user")
 const users = require("..");
 
+export const generateAuthToken = function(id){
+    const token = jwt.sign({id}, process.env.JWTPRIVATEKEY);
+    return token;
+}
+
+
+router.post('/register', async (req, res) => {
+    try {
+       
+        let user = await userModel.findOne({ name: req.body.name });
+        if (user)
+            return res.status(409).send({ errors: { name: "User with given name already exists" }, success: false });
+
+        user = await userModel.findOne({ email: req.body.email });
+        if (user)
+            return res.status(409).send({ errors: { email: "User with given email already exists" }, success: false });
+
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+        const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+        await new userModel({ ...req.body, password: hashPassword }).save();
+        const usernew = await userModel.findOne({ name: req.body.name });
+        if (!usernew)
+            return res.status(500).send({ message: "Error creating user", success: false });
+
+        const token = generateAuthToken(usernew._id);
+        return res.status(201).send({ authToken: token, message: "Signed in successfully", success: true });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ message: "Internal server error", success: false });
+    }
+});
+router.post('/login', async (req, res ) => {
+    try {
+        
+        const user = await userModel.findOne({ email: req.body.email });
+        if (!user)
+            return res.status(401).send({ errors: { email: "User with given email does not exist" }, success: false });
+
+        const validatePassword = await bcrypt.compare(req.body.password, user.password);
+        if (!validatePassword)
+            return res.status(401).send({ errors: { password: "Incorrect password" }, success: false });
+
+        const token = generateAuthToken(user._id);
+        res.status(200).send({ authToken: token, message: "Logged in successfully", success: true });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({ message: "Internal server error", success: false });
+    }
+});
+
 router.post("/signup", async(req, res) =>{
     const {username, password} = req.body;
     if(!username || !password){

@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import Layout from "./pages/layout";
 import Landing from "./pages/landing";
 import Courses from "./pages/courses";
+import Applay from "./pages/applay";
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/home" element={<Layout><Home /></Layout>} />
         <Route path="/courses" element={<Layout><Courses /></Layout>} />
+        <Route path="/applay" element={<Layout><Applay /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
