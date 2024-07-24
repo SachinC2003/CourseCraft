@@ -1,12 +1,12 @@
 const userMenu =[
     {
         name : "Home",
-        path : "/",
+        path : "/courses",
         icon:'ri-home-line'
     },
     {
-        name : "Courses",
-        path : "/courses",
+        name : "My-Courses",
+        path : "/mycourses",
         icon:'ri-home-line'
     },
     {

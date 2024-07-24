@@ -2,105 +2,63 @@ const {Router} = require("express")
 const router = Router();
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const {User, Course} = require("../db/index")
+const {User, Admin, Course} = require("../db/index")
 const userMiddleware = require("../middleware/user")
 const users = require("..");
 
-export const generateAuthToken = function(id){
-    const token = jwt.sign({id}, process.env.JWTPRIVATEKEY);
-    return token;
-}
-
-
-router.post('/register', async (req, res) => {
+router.post('/signup', async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).send({ msg: 'Invalid username and password' });
+    }
+  
     try {
-       
-        let user = await userModel.findOne({ name: req.body.name });
-        if (user)
-            return res.status(409).send({ errors: { name: "User with given name already exists" }, success: false });
-
-        user = await userModel.findOne({ email: req.body.email });
-        if (user)
-            return res.status(409).send({ errors: { email: "User with given email already exists" }, success: false });
-
-        const salt = await bcrypt.genSalt(Number(process.env.SALT));
-        const hashPassword = await bcrypt.hash(req.body.password, salt);
-
-        await new userModel({ ...req.body, password: hashPassword }).save();
-        const usernew = await userModel.findOne({ name: req.body.name });
-        if (!usernew)
-            return res.status(500).send({ message: "Error creating user", success: false });
-
-        const token = generateAuthToken(usernew._id);
-        return res.status(201).send({ authToken: token, message: "Signed in successfully", success: true });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).send({ message: "Internal server error", success: false });
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res.status(409).send({ msg: 'User already exists' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = await User.create({ username, password: hashedPassword });
+  
+      // Generate a token
+      const token = jwt.sign({ userId: user._id, username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+  
+      return res.status(201).send({ msg: 'User created', token });
+    } catch (error) {
+      console.error('Error creating user:', error); // Log the error for debugging
+      return res.status(500).send({ msg: 'User not created', error: error.message });
     }
-});
-router.post('/login', async (req, res ) => {
+  });
+
+  router.post("/signin", async (req, res) => {
+    const { username, password } = req.body;
+  
+    if (!username || !password) {
+      return res.status(400).send({ msg: "All fields are required" });
+    }
+  
     try {
-        
-        const user = await userModel.findOne({ email: req.body.email });
-        if (!user)
-            return res.status(401).send({ errors: { email: "User with given email does not exist" }, success: false });
-
-        const validatePassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validatePassword)
-            return res.status(401).send({ errors: { password: "Incorrect password" }, success: false });
-
-        const token = generateAuthToken(user._id);
-        res.status(200).send({ authToken: token, message: "Logged in successfully", success: true });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).send({ message: "Internal server error", success: false });
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(404).send({ msg: "User with given username not found" });
+      }
+  
+      const isMatched = await bcrypt.compare(password, user.password);
+      if (!isMatched) {
+        return res.status(401).send({ msg: "Credentials do not match" });
+      }
+  
+      const token = jwt.sign({ _id: user._id, username: username }, process.env.SECRET_KEY, { expiresIn: "1d" });
+  
+      return res.status(200).send({ token });
+    } catch (error) {
+      console.error('Signin error:', error);
+      return res.status(500).send({ msg: "Something went wrong", error: error.message });
     }
-});
-
-router.post("/signup", async(req, res) =>{
-    const {username, password} = req.body;
-    if(!username || !password){
-        return res.status(403).send({msg : "Invalide username and password"});
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    try{
-        await User.create({username : username, password : hashedPassword});
-        return res.status(201).send({msg :"user created"});
-    }catch(error){
-        return res.status(500).send({msg :"user not created", erro: error});
-    }
-})
-
-router.post("/signin", async(req, res)=>{
-    const {username, password} = req.body
-    if(!username || !password){
-        return res.status(403).send({msg : "All fields are required"});
-    }
-
-    try{
-        const user = await User.findOne({username : username});
-        if(!user){
-            return res.status(403).send({msg : "User with given username not found"});
-        }
-
-        const ismatched = await bcrypt.compare(password, user.password);
-        if(!ismatched){
-            return res.status(403).send({msg : "Credential are not matched"});
-        }
-
-        const token = jwt.sign(
-            {_id : user._id, username : username},
-            process.env.JWT_KEY,
-            {expiresIn : "1d"}
-        );
-
-        return res.status(201).send({token : token})
-    }catch(error){
-        console.log(error);
-        return res.status(500).send({msg :"something erroe is encounter", error : error})
-    }
-    
-})
+  });
+  
+  
 
 router.get("/courses", userMiddleware, async(req, res)=>{
     try{
@@ -146,5 +104,26 @@ router.get("/purchasedCourses", userMiddleware, async (req, res) => {
       return res.status(500).send({ message: "Error fetching courses" });
     }
   });
+
+  router.post("/applay", async (req, res) => {
+    console.log('Received request at /applay'); // Add this line
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(403).send({ msg: "username and password are required" });
+    }
+    try {
+      const admin = await Admin.findOne({ username,password });
+      if (admin) {
+        return res.status(404).send({ msg: "admin with given username already exists" });
+      }
+      await Admin.create({ username, password });
+      console.log('Admin created successfully'); // Add this line
+      return res.status(201).send({ msg: "Applied for Admin successfully" });
+    } catch (error) {
+      console.error('Error in /applay route:', error); // Add this line
+      return res.status(500).send({ msg: "Admin signup failed", error: error.message });
+    }
+});
+
 
 module.exports = router;
