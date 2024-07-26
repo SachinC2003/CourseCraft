@@ -2,34 +2,54 @@ const {Router} = require("express")
 const router = Router();
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const {User, Admin, Course} = require("../db/index")
-const userMiddleware = require("../middleware/user")
+const {User, Teacher, Course} = require("../db/index")
+const Usermiddleware = require("../middleware/user")
+const authMiddleware = require("../middleware/authMiddleware")
 const users = require("..");
 
-router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).send({ msg: 'Invalid username and password' });
-    }
-  
-    try {
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
-        return res.status(409).send({ msg: 'User already exists' });
+
+router.get('/me', authMiddleware, async (req, res) => {
+  try {
+      const userId = req.user.userId;
+      const user = await User.findById(userId).select('-password'); // Exclude password from the result
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
       }
-  
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await User.create({ username, password: hashedPassword });
-  
-      // Generate a token
-      const token = jwt.sign({ userId: user._id, username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
-  
-      return res.status(201).send({ msg: 'User created', token });
-    } catch (error) {
-      console.error('Error creating user:', error); // Log the error for debugging
-      return res.status(500).send({ msg: 'User not created', error: error.message });
+      res.json({ userId: user._id, username: user.username });
+  } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.post('/signup', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).send({ msg: 'Invalid username and password' });
+  }
+
+  try {
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(409).send({ msg: 'User already exists' });
     }
-  });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, password: hashedPassword });
+
+    // Generate a token
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+
+    return res.status(201).send({
+      msg: 'User created',
+      token,
+      userId: user._id.toString() // Make sure to include this
+    });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return res.status(500).send({ msg: 'User not created', error: error.message });
+  }
+});
 
   router.post("/signin", async (req, res) => {
     const { username, password } = req.body;
@@ -60,7 +80,7 @@ router.post('/signup', async (req, res) => {
   
   
 
-router.get("/courses", userMiddleware, async(req, res)=>{
+router.get("/courses", Usermiddleware, async(req, res)=>{
     try{
         const allcourses = await Course.find()
         return res.status(201).send({courses: allcourses})
@@ -69,7 +89,7 @@ router.get("/courses", userMiddleware, async(req, res)=>{
     }
 })
 
-router.post("/courses/:courseid", userMiddleware, async(req, res)=>{
+router.post("/bye/:courseid", Usermiddleware, async(req, res)=>{
     const courseid = req.params.courseid;
     if(!courseid){
         return res.status(403).send({msg: "course id not found"});
@@ -95,7 +115,7 @@ router.post("/courses/:courseid", userMiddleware, async(req, res)=>{
         }
 })
 
-router.get("/purchasedCourses", userMiddleware, async (req, res) => {
+router.get("/purchasedCourses", Usermiddleware, async (req, res) => {
     // Implement fetching purchased courses logic
     try {
       const user = await User.findById(req.user._id).populate("myCourses");
@@ -105,25 +125,39 @@ router.get("/purchasedCourses", userMiddleware, async (req, res) => {
     }
   });
 
-  router.post("/applay", async (req, res) => {
-    console.log('Received request at /applay'); // Add this line
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(403).send({ msg: "username and password are required" });
+  router.post("/applay", authMiddleware, async (req, res) => {
+    console.log('Received request at /applay');
+    console.log('Request headers:', req.headers);
+    console.log('Request body:', req.body);
+    console.log('User from middleware:', req.user);
+  
+    const { bio, qualifications, subject } = req.body;
+    const userId = req.user.userId; // Get userId from the authenticated user
+  
+    if (!bio || !qualifications || !subject) {
+      return res.status(400).send({ msg: "All fields are required" });
     }
+  
     try {
-      const admin = await Admin.findOne({ username,password });
-      if (admin) {
-        return res.status(404).send({ msg: "admin with given username already exists" });
+      const teacher = await Teacher.findOne({ user: userId });
+      if (teacher) {
+        return res.status(409).send({ msg: "Teacher application already exists for this user" });
       }
-      await Admin.create({ username, password });
-      console.log('Admin created successfully'); // Add this line
-      return res.status(201).send({ msg: "Applied for Admin successfully" });
+  
+      const newTeacher = await Teacher.create({
+        user: userId,
+        bio,
+        qualifications,
+        subject,
+        status: "pending"
+      });
+  
+      console.log('Teacher application created successfully');
+      return res.status(201).send({ msg: "Applied for teacher successfully" });
     } catch (error) {
-      console.error('Error in /applay route:', error); // Add this line
-      return res.status(500).send({ msg: "Admin signup failed", error: error.message });
+      console.error('Error in /applay route:', error);
+      return res.status(500).send({ msg: "Teacher application failed", error: error.message });
     }
-});
-
+  });
 
 module.exports = router;

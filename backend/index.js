@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 
-const adminRoute = require('./routes/admin');
+const teacherRoute = require('./routes/teacher');
 const userRoute = require('./routes/user')
 app.use(cors({
     origin: 'http://localhost:5173' // Replace with your frontend's origin
@@ -14,7 +14,7 @@ app.use(cors({
 const PORT = 3000;
 
 app.use(bodyParser.json());
-app.use('/admin', adminRoute);
+app.use('/teacher', teacherRoute);
 app.use("/user", userRoute)
 
 app.listen(PORT, ()=> {

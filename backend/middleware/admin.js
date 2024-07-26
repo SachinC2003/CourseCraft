@@ -1,20 +1,12 @@
 const {Admin} = require("../db/index")
 
-async function AdminMiddleware (req, res, next) {
-        const {username, password} = req.headers;
+async function AdminMiddleware (req, res, next){
+    if(req.user.role != 'admin')
+    {
+        return res.status(403).send({msg: "Access denied. Admins only."})
+    }
 
-        if(!username || !password){
-            return res.satus(403).send({msg: "Invalid username and pasaword"});
-        }
-
-        const admin = await Admin.findone({username : username, password : password});
-        
-        if(!admin){
-            return res.status(403).send({msg : "Admin with given username and password not found"})
-        }else{
-            req.admin = admin;
-            next()
-        }
+    next();
 }
 
-module.exports = AdminMiddleware;
+module.exports =  AdminMiddleware;

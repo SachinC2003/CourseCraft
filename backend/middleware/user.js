@@ -1,19 +1,26 @@
-const {User} = require("../db/index")
+const { User } = require("../db/index"); // Adjust the path as necessary
 
-async function Usermiddleware(req, res, next){
-    const {username, password} = req.headers;
+async function Usermiddleware(req, res, next) {
+    const userId = req.headers.userid;
+    console.log('Received userId in middleware:', userId);
 
-    if(!username || !password){
-        return req.status(403).send({msg : "Invalid username and pasaword"});
+    if (!userId) {
+        return res.status(403).send({ msg: "User ID is required" });
     }
 
-    const user = await User.findone({username : username, password : password})
+    try {
+        const user = await User.findById(userId);
+        console.log('Found user:', user);
 
-    if(!user){
-        return res.staus(403).send({msg : "User with given username and password not found"})
-    }else{
-        req.user = User;
-        next()
+        if (!user) {
+            return res.status(403).send({ msg: "User not found" });
+        } else {
+            req.user = user;
+            next();
+        }
+    } catch (error) {
+        console.error('Error in Usermiddleware:', error);
+        return res.status(500).send({ msg: "Internal server error" });
     }
 }
 

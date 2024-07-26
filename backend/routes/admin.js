@@ -1,75 +1,43 @@
-const {Router} = require("express")
-const router = Router();
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+const {Route} = require("express")
+const router = Router()
 
-const {Admin, Course} = require("../db/index");
-const adminMiddleware = require("../middleware/admin")
+const {Teacher, User} = require("../db/index")
+const {adminMiddleware} = require("../middleware/user")
 const users = require("..");
 
-
-
-router.post("/signin", async(req, res)=>{
-    const {username, password} = req.body
-    if(!username || !password){
-        return res.status(403).send({msg : "All fields are required"});
-    }
-
+router.get("/courses", Usermiddleware, async(req, res)=>{
     try{
-        const admin = await Admin.findOne({username : username});
-        if(!admin){
-            return res.status(403).send({msg : "Admin with given username not found"});
+        const allcourses = await Course.find()
+        return res.status(201).send({courses: allcourses})
+    }catch(error){
+        return res.status(500).send({msg : "error to fetching courses", error : error})
+    }
+})
+
+router.get("/teachers", adminMiddleware, async(req, res)=>{
+    try{
+        const allteachers = await Teacher.find()
+        return res.status(201).send({teachers: allteachers})
+    }catch(error){
+        return res.status(500).send({msg : "error to fetching techers", error : error})
+    }
+})
+
+router.put("/aprove/:id", adminMiddleware, async(req, res) =>{
+    const teacherId = req.params.id;
+    try{
+        const teacher = await Teacher.findById(teacherId);
+        if(!teacher){
+            return res.status(404).send({msg : "Teacher application not found"});
         }
 
-        const ismatched = await bcrypt.compare(password, admin.password);
-        if(!ismatched){
-            return res.status(403).send({msg : "Credential are not matched"});
-        }
+        teacher.status = 'approved';
+        await teacher.save();
 
-        const token = jwt.sign(
-            {_id : admin._id, username : username},
-            process.env.JWT_KEY,
-            {expiresIn : "1d"}
-        );
-
-        return res.status(201).send({token : token})
-    }catch(error){
-        return res.status(500).send({msg :"something erroe is encounter", error : error})
-    }
-    
-})
-
-router.post("/aplodcourse", adminMiddleware, async(req, res) =>{
-    const {title, description, price, owner, image} = req.body
-    if(!title || !description || !price || !owner || !image){
-        return res.status(403).send({msg : "Incomplete info of course"});
-    }
-
-    try{
-        const admin = await Admin.findById(req.Admin._id);
-        const course = await Course.create({
-            title : title,
-            description : description,
-            price : price,
-            image : image,
-            owner : owner,
-        })
-
-        admin.courses.push(course._id);
-        await admin.save();
-        return res.status(201).send({msg : "Course created succsessfully"});
-    }catch(error){
-        return res.status(500).send({msg : "Course not created", error : error});
+        await User.findByIdAndUpdate(teacherId, {role:"tecaher"});
+        return res.status(200).send({ msg: "Teacher application approved successfully" });
+    } catch (error) {
+        console.error('Error in /approve-teacher route:', error);
+        return res.status(500).send({ msg: "Failed to approve teacher application", error: error.message });
     }
 })
-
-router.get("/courses", adminMiddleware, async(req, res) =>{
-    try{
-        const admin = await Admin.findById(req.admin._id).populate("courses")
-        return res.status(201).send({courses : admin.courses})
-    }catch(error){
-        return res.status(500).send({msg :"Error in fetching courses"})
-    }
-})
-
-module.exports = router;
