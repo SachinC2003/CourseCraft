@@ -1,11 +1,49 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { userAtom } from "../store/userAtom"; // Adjust the path if necessary
 
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const setUser = useSetRecoilState(userAtom);
+
+  const handleSignup = async () => {
+    try {
+      console.log("Attempting signup with:", { username, password });
+      const response = await axios.post("http://localhost:3000/user/signup", {
+        username,
+        password,
+      });
+      console.log("Signup response:", response.data);
+      
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        console.log("Token saved to localStorage:", response.data.token);
+        
+        // If userId is not in the response, we'll extract it from the token
+        let userId = response.data.userId;
+        if (!userId) {
+          // Decode the token to get the userId
+          const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
+          userId = decodedToken.userId;
+        }
+        
+        setUser({ userId: userId });
+        console.log("User state set:", { userId: userId });
+        
+        navigate("/courses");
+      } else {
+        console.error("Signup successful but token is missing in the response");
+        alert("Signup successful, but there was an issue logging you in. Please try signing in.");
+      }
+    } catch (error) {
+      console.error('Signup error:', error.response ? error.response.data : error);
+      alert(error.response?.data?.msg || "An error occurred. Please try again.");
+    }
+  };
 
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
@@ -36,23 +74,7 @@ export default function Signup() {
           </div>
           <button
             className="w-full rounded-lg bg-slate-900 text-white font-bold h-10"
-            onClick={async () => {
-              try {
-                const response = await axios.post("http://localhost:3000/user/signup", {
-                  username,
-                  password,
-                });
-                localStorage.setItem("token", response.data.token);
-                navigate("/courses");
-              } catch (error) {
-                console.error('Signup error:', error); // Log the error for debugging
-                if (error.response && error.response.status === 409) {
-                  alert("User already exists. Please use a different email.");
-                } else {
-                  alert("An error occurred. Please try again.");
-                }
-              }
-            }}
+            onClick={handleSignup}
           >
             Signup
           </button>

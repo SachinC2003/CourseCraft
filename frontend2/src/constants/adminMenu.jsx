@@ -1,17 +1,17 @@
-const classesMenu =[
+const adminMenu =[
     {
         name : "Home",
-        path : "/",
-        icon:'ri-home-line'
-    },
-    {
-        name : "Courses",
         path : "/courses",
         icon:'ri-home-line'
     },
     {
-        name : "Applications",
-        path : "/applications",
+        name : "Teacher",
+        path : "/mycourses",
+        icon:'ri-home-line'
+    },
+    {
+        name : "Aprove-Teachers",
+        path : "/applay",
         icon:'ri-home-line'
     },
     {
@@ -21,4 +21,4 @@ const classesMenu =[
     }
 ]
 
-export default classesMenu;
+export default adminMenu;

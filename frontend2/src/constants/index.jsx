@@ -1,4 +1,4 @@
 import userMenu from "./userMenu";
-import classesMenu from "./classesMenu";
+import teacherMenu from "./teacherMenu";
 
-export {userMenu, classesMenu} ;
+export {userMenu, teacherMenu} ;
