@@ -12,35 +12,26 @@ export default function Signup() {
 
   const handleSignup = async () => {
     try {
-      console.log("Attempting signup with:", { username, password });
-      const response = await axios.post("http://localhost:3000/user/signup", {
+      const response = await axios.post("http://localhost:3000/user/signup", { // or /signup
         username,
         password,
       });
-      console.log("Signup response:", response.data);
+      console.log("Response:", response.data);
       
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-        console.log("Token saved to localStorage:", response.data.token);
-        
-        // If userId is not in the response, we'll extract it from the token
-        let userId = response.data.userId;
-        if (!userId) {
-          // Decode the token to get the userId
-          const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
-          userId = decodedToken.userId;
-        }
-        
-        setUser({ userId: userId });
-        console.log("User state set:", { userId: userId });
-        
+        setUser({ 
+          userId: response.data.userId, 
+          role: response.data.role 
+        });
+        console.log("User state set:", { userId: response.data.userId, role: response.data.role });
         navigate("/courses");
       } else {
-        console.error("Signup successful but token is missing in the response");
-        alert("Signup successful, but there was an issue logging you in. Please try signing in.");
+        console.error("Authentication successful but token is missing in the response");
+        alert("Authentication successful, but there was an issue. Please try again.");
       }
     } catch (error) {
-      console.error('Signup error:', error.response ? error.response.data : error);
+      console.error('Authentication error:', error.response ? error.response.data : error);
       alert(error.response?.data?.msg || "An error occurred. Please try again.");
     }
   };

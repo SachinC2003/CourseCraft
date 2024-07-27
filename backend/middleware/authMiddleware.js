@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 function authMiddleware(req, res, next) {
     console.log('Auth middleware called');
     console.log('Request headers:', req.headers);
@@ -20,3 +21,5 @@ function authMiddleware(req, res, next) {
       return res.status(403).json({ message: "Invalid token" });
     }
   }
+
+  module.exports = authMiddleware;

@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")*/
 
 const {Teacher, Course} = require("../db/index");
 const teacherMiddleware = require("../middleware/teacher")
-const users = require("..");
+
 
 router.get("/courses", teacherMiddleware, async(req, res)=>{
     try{

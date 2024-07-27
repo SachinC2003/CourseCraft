@@ -1,11 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { userAtom } from "../store/userAtom";
 
-export default function Signup() {
+export default function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const setUser = useSetRecoilState(userAtom);
 
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
@@ -38,19 +41,27 @@ export default function Signup() {
             className="w-full rounded-lg bg-slate-900 text-white font-bold h-10"
             onClick={async () => {
               try {
-                const response = await axios.post("http://localhost:3000/user/signin", {
+                const response = await axios.post("http://localhost:3000/user/signin", { // or /signup
                   username,
                   password,
                 });
-                localStorage.setItem("token", response.data.token);
-                navigate("/courses");
-              } catch (error) {
-                console.error('Signup error:', error); // Log the error for debugging
-                if (error.response && error.response.status === 409) {
-                  alert("User already exists. Please use a different email.");
+                console.log("Response:", response.data);
+                
+                if (response.data.token) {
+                  localStorage.setItem("token", response.data.token);
+                  setUser({ 
+                    userId: response.data.userId, 
+                    role: response.data.role 
+                  });
+                  console.log("User state set:", { userId: response.data.userId, role: response.data.role });
+                  navigate("/courses");
                 } else {
-                  alert("An error occurred. Please try again.");
+                  console.error("Authentication successful but token is missing in the response");
+                  alert("Authentication successful, but there was an issue. Please try again.");
                 }
+              } catch (error) {
+                console.error('Authentication error:', error.response ? error.response.data : error);
+                alert(error.response?.data?.msg || "An error occurred. Please try again.");
               }
             }}
           >

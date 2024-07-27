@@ -2,5 +2,5 @@ import { atom } from 'recoil';
 
 export const userAtom = atom({
   key: 'userAtom',
-  default: { userId: null }
+  default: { userId: null, role: '' }
 });

@@ -3,7 +3,7 @@ const router = Router()
 
 const {Teacher, User} = require("../db/index")
 const {adminMiddleware} = require("../middleware/user")
-const users = require("..");
+
 
 router.get("/courses", Usermiddleware, async(req, res)=>{
     try{

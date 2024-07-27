@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { userMenu } from '../constants'; // Ensure this import is correct
+import { userMenu, teacherMenu, adminMenu } from '../constants/index'; // Ensure this import is correct
+import { useRecoilValue } from "recoil";
+import { userAtom } from "../store/userAtom";
 
 const Layout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(true);
-  const menuToBeRendered = userMenu;
+  const user = useRecoilValue(userAtom);
+  console.log("User state in Layout:", user);
+
+  const menuToBeRendered = user.role === 'admin' ? adminMenu
+                         : user.role === 'teacher' ? teacherMenu
+                         : userMenu;
+
+  console.log("User role:", user.role); // This should log the user's role
 
   return (
     <div className="h-screen grid grid-cols-12">

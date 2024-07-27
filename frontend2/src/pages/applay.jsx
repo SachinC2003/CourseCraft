@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import InputBox from "../components/inputBox";
 import Button from "../components/button";
 import axios from "axios";
-import { userAtom } from "../store/userAtom"; // Adjust the path accordingly
+import { userAtom } from "../store/userAtom";
 
 export default function Applay() {
     const [bio, setBio] = useState("");
