@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User, Teacher, Course } = require("../db/index");
+const { User, Teacher, Course, Application } = require("../db/index");
 const Usermiddleware = require("../middleware/user");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -149,7 +149,7 @@ router.post("/applay", authMiddleware, async (req, res) => {
       return res.status(409).send({ msg: "Teacher application already exists for this user" });
     }
 
-    const newTeacher = await Teacher.create({
+    const newTeacher = await Application.create({
       user: userId,
       bio,
       qualifications,

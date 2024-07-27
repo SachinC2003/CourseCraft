@@ -9,6 +9,7 @@ import Landing from "./pages/landing";
 import Courses from "./pages/courses";
 import Applay from "./pages/applay";
 import MyCourses from "./pages/myCourses";
+import ApplicationGrid from "./components/applicationGrid";
 import { userAtom } from "./store/userAtom"
 
 function AppContent() {
@@ -60,6 +61,7 @@ function AppContent() {
         <Route path="/mycourses" element={<Layout><MyCourses /></Layout>} />
         <Route path="/courses" element={<Layout><Courses /></Layout>} />
         <Route path="/applay" element={<Layout><Applay /></Layout>} />
+        <Route path="/applications" element={<Layout><ApplicationGrid /></Layout>} />
       </Routes>
     </BrowserRouter>
   );

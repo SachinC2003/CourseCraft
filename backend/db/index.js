@@ -16,10 +16,19 @@ const TeacherSchema = new mongoose.Schema({
     bio: { type: String, required: true },
     qualifications: { type: String, required: true },
     subjects: [{ type: String }],
-    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
+
+const ApplicationSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    bio: { type: String, required: true },
+    qualifications: { type: String, required: true },
+    subjects: [{ type: String }],
+    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
+  });
 
 const CourseSchema = new mongoose.Schema({
     title : String,
@@ -33,10 +42,12 @@ const CourseSchema = new mongoose.Schema({
 const User = mongoose.model("User", UserSchema);
 const Teacher = mongoose.model("Teacher", TeacherSchema);
 const Course = mongoose.model("Course", CourseSchema)
+const Application = mongoose.model("Application", ApplicationSchema)
 
 module.exports = {
     User,
     Course,
-    Teacher
+    Teacher,
+    Application
 };
 

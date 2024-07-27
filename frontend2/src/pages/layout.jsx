@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
                          : userMenu;
 
   console.log("User role:", user.role); // This should log the user's role
-
+  console.log(menuToBeRendered)
   return (
     <div className="h-screen grid grid-cols-12">
       {/* Sidebar */}

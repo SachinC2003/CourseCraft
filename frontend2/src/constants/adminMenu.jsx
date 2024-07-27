@@ -5,13 +5,13 @@ const adminMenu =[
         icon:'ri-home-line'
     },
     {
-        name : "Teacher",
+        name : "Teachers",
         path : "/mycourses",
         icon:'ri-home-line'
     },
     {
         name : "Aprove-Teachers",
-        path : "/applay",
+        path : "/applications",
         icon:'ri-home-line'
     },
     {
