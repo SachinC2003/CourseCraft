@@ -21,7 +21,7 @@ const TeacherSchema = new mongoose.Schema({
 });
 
 const ApplicationSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     bio: { type: String, required: true },
     qualifications: { type: String, required: true },
     subjects: [{ type: String }],
@@ -35,7 +35,6 @@ const CourseSchema = new mongoose.Schema({
     description : String,
     price : Number,
     owner : String,
-    image : String,
     published : {type: Boolean , default : false}
 })
 

@@ -14,3 +14,5 @@ const AdminMiddleware = async (req, res, next) => {
     console.log('Admin access granted');
     next();
 };
+
+module.exports = AdminMiddleware;

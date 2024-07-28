@@ -1,46 +1,88 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Landing() {
+const LandingPage = () => {
   return (
-    <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 min-h-screen flex flex-col items-center justify-between p-4">
-      <div className="text-center mt-16">
-        <h1 className="text-5xl font-bold text-white mb-4">Welcome to EduMarket</h1>
-        <p className="text-lg text-gray-200 mb-6">Find and buy the best classes to upgrade your skills</p>
-        <p className="text-md text-gray-100 max-w-2xl mx-auto">
-          EduMarket is your one-stop destination for online learning. With thousands of courses ranging from web development to data science, you can find the perfect class to improve your skills and advance your career.
-        </p>
-      </div>
+    <div className="bg-gray-100 min-h-screen">
+      <header className="bg-white shadow-md p-4">
+        <nav className="container mx-auto flex justify-between items-center">
+          <h1 className="text-xl font-bold text-gray-800">Your Project Name</h1>
+          <ul className="flex space-x-4">
+            <li><a href="#features" className="text-gray-600 hover:text-gray-800">Features</a></li>
+            <li><a href="#about" className="text-gray-600 hover:text-gray-800">About</a></li>
+            <li><a href="#contact" className="text-gray-600 hover:text-gray-800">Contact</a></li>
+            <li>
+              <Link to="/signin">
+                <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                  Sign In
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link to="/signup">
+                <button className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+                  Sign Up
+                </button>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-      <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mt-8">
-        <Link to="/signin">
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-            Sign In
-          </button>
-        </Link>
-        <Link to="/signup">
-          <button className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
-            Sign Up
-          </button>
-        </Link>
-      </div>
+      <main className="container mx-auto mt-10 p-4">
+        <section className="flex flex-col md:flex-row justify-between items-center">
+          <img src="path-to-your-image1.jpg" alt="Side Image 1" className="w-full md:w-1/4 h-64 rounded-lg shadow-lg mb-4 md:mb-0" />
+          <div className="text-center mx-4 md:w-1/2">
+            <h2 className="text-4xl font-bold text-gray-800">Welcome to Your Project</h2>
+            <p className="mt-4 text-gray-600">This is a simple and elegant landing page template using React and Tailwind CSS.</p>
+            <a href="#features" className="mt-8 inline-block bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600">Learn More</a>
+          </div>
+          <img src="path-to-your-image2.jpg" alt="Side Image 2" className="w-full md:w-1/4 h-64 rounded-lg shadow-lg mt-4 md:mt-0" />
+        </section>
 
-      <div className="mt-10 flex justify-between w-full mb-16">
-        <div className="max-w-xs rounded overflow-hidden shadow-lg bg-white m-4">
-          <img className="w-full" src="https://via.placeholder.com/250x350" alt="Course 1" />
-          <div className="px-6 py-4">
-            <div className="font-bold text-xl mb-2">Learn Web Development</div>
-            <p className="text-gray-700 text-base">Build amazing websites and web apps using HTML, CSS, and JavaScript.</p>
+        <section id="features" className="mt-20">
+          <h3 className="text-2xl font-bold text-gray-800 text-center">Features</h3>
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h4 className="text-xl font-bold text-gray-800">Feature One</h4>
+              <p className="mt-2 text-gray-600">Description of feature one.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h4 className="text-xl font-bold text-gray-800">Feature Two</h4>
+              <p className="mt-2 text-gray-600">Description of feature two.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h4 className="text-xl font-bold text-gray-800">Feature Three</h4>
+              <p className="mt-2 text-gray-600">Description of feature three.</p>
+            </div>
           </div>
-        </div>
-        <div className="max-w-md rounded overflow-hidden shadow-lg bg-white m-4">
-          <img className="w-full" src="https://via.placeholder.com/350x250" alt="Course 2" />
-          <div className="px-6 py-4">
-            <div className="font-bold text-xl mb-2">Master Data Science</div>
-            <p className="text-gray-700 text-base">Learn to analyze data, build predictive models, and more.</p>
-          </div>
-        </div>
-      </div>
+        </section>
+
+        <section id="about" className="mt-20 text-center">
+          <h3 className="text-2xl font-bold text-gray-800">About Us</h3>
+          <p className="mt-4 text-gray-600">
+            We are a team of passionate developers and designers dedicated to creating
+            innovative solutions for our clients. Our mission is to provide high-quality
+            services that exceed our clients' expectations. We believe in the power of
+            technology to transform businesses and make the world a better place.
+          </p>
+        </section>
+
+        <section id="contact" className="mt-20 text-center">
+          <h3 className="text-2xl font-bold text-gray-800">Contact Us</h3>
+          <p className="mt-4 text-gray-600">
+            If you have any questions or would like to get in touch, please contact us at:
+            <br />
+            <strong>Email:</strong> contact@yourproject.com
+            <br />
+            <strong>Phone:</strong> (123) 456-7890
+            <br />
+            <strong>Address:</strong> 123 Your Project St, City, Country
+          </p>
+        </section>
+      </main>
     </div>
   );
-}
+};
+
+export default LandingPage;

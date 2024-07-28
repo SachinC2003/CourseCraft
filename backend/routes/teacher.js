@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")*/
 
 const {Teacher, Course} = require("../db/index");
 const teacherMiddleware = require("../middleware/teacher")
+const authMiddleware = require("../middleware/authMiddleware")
 
 
 router.get("/courses", teacherMiddleware, async(req, res)=>{
@@ -16,19 +17,21 @@ router.get("/courses", teacherMiddleware, async(req, res)=>{
     }
 })
 
-router.post("/aplodcourse", teacherMiddleware, async(req, res) =>{
+router.post("/aplodcourse", authMiddleware , async(req, res) =>{
+    console.log("hii aplode")
     const {title, description, price, owner, image} = req.body
-    if(!title || !description || !price || !owner || !image){
+    console.log(req.body)
+    if(!title || !description || !price || !owner){
         return res.status(403).send({msg : "Incomplete info of course"});
     }
 
     try{
         const teacher = await Teacher.findById(req.Teacher._id);
+        console.log(teacher)
         const course = await Course.create({
             title : title,
             description : description,
             price : price,
-            image : image,
             owner : owner,
         })
 

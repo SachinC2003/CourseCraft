@@ -9,8 +9,6 @@ const authMiddleware = require("../middleware/authMiddleware");
 // Remove the incorrect import:
 // const users = require("..");
 router.get('/me', authMiddleware, async (req, res) => {
-  console.log('GET /me route handler called');
-  console.log('User from token:', req.user);
 
   try {
     const userId = req.user.userId;

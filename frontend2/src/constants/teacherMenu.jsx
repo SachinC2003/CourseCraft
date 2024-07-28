@@ -11,7 +11,7 @@ const teacherMenu =[
     },
     {
         name : "Aplode-course",
-        path : "/applications",
+        path : "/aplodecourse",
         icon:'ri-home-line'
     },
     {

@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const { Teacher, User, Course, Application } = require("../db/index");
+const { Teacher, Course, Application } = require("../db/index");
 const AdminMiddleware = require("../middleware/admin");
+const authMiddleware = require("../middleware/authMiddleware")
 
 router.get("/courses", AdminMiddleware, async (req, res) => {
     try {
@@ -32,7 +33,7 @@ router.get("/applications", async (req, res) => {
     }
 });
 
-router.put("/approve/:id", AdminMiddleware, async (req, res) => {
+router.put("/approve/:id",authMiddleware, AdminMiddleware, async (req, res) => {
     const applicationId = req.params.id;
     try {
         const application = await Application.findById(applicationId).populate('user');

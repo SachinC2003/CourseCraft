@@ -11,6 +11,7 @@ import Applay from "./pages/applay";
 import MyCourses from "./pages/myCourses";
 import ApplicationGrid from "./components/applicationGrid";
 import { userAtom } from "./store/userAtom"
+import UploadCourse from "./pages/uplodeCourse";
 
 function AppContent() {
   const setUser = useSetRecoilState(userAtom);
@@ -62,6 +63,7 @@ function AppContent() {
         <Route path="/courses" element={<Layout><Courses /></Layout>} />
         <Route path="/applay" element={<Layout><Applay /></Layout>} />
         <Route path="/applications" element={<Layout><ApplicationGrid /></Layout>} />
+        <Route path="/aplodecourse" element={<Layout><UploadCourse /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
