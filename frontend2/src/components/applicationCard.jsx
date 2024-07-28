@@ -5,7 +5,10 @@ import axios from "axios";
 const ApplicationCard = (props) => {
     const handleApprove = async () => {
         try {
-            await axios.put(`/api/applications/${props.id}`, { status: 'approved' });
+            console.log(props)
+            await axios.put(`http://localhost:3000/admin/approve/${props.id}`, {}, {
+                headers: { Authorization: `Bearer ${props.token}` }
+            });
             // You might want to add some feedback to the user here, like:
             alert('Application approved successfully!');
             // Or update the UI in some way
@@ -18,8 +21,8 @@ const ApplicationCard = (props) => {
     return (
         <div className="bg-white rounded-lg shadow-md p-4 h-60 w-80">
             <h2 className="text-lg font-bold mb-2">Bio - {props.bio}</h2>
-            <p className="text-gray-600 mb-2 pt-1">Qualification - {props.qualification}</p>
-            <p className="text-gray-600 mb-2 pt-1">Subject - {props.subject}</p>
+            <p className="text-gray-600 mb-2 pt-1">Qualification - {props.qualifications}</p>
+            <p className="text-gray-600 mb-2 pt-1">Subject - {props.subjects.join(', ')}</p>
             <Button 
                 label="Approve Application"
                 onClick={handleApprove}

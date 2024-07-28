@@ -6,8 +6,13 @@ export default function ApplicationGrid() {
     const [applications, setApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [token, setToken] = useState("")
 
     useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
         fetchApplications();
     }, []);
 
@@ -15,7 +20,6 @@ export default function ApplicationGrid() {
         try {
             setIsLoading(true);
             const response = await axios.get('http://localhost:3000/admin/applications');
-            
             if (Array.isArray(response.data)) {
                 setApplications(response.data);
             } else {
@@ -46,8 +50,10 @@ export default function ApplicationGrid() {
                         key={application._id} 
                         id={application._id}
                         bio={application.bio}
-                        qualification={application.qualification}
-                        subject={application.subject}
+                        qualifications={application.qualifications}
+                        subjects={application.subjects}
+                        userId={application.user?._id}
+                        token={token}
                     />
                 ))
             ) : (
