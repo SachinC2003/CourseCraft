@@ -1,24 +1,26 @@
-const adminMenu =[
+import { FaHome, FaChalkboardTeacher, FaCheckCircle, FaSignOutAlt } from 'react-icons/fa';
+
+const adminMenu = [
     {
-        name : "Home",
-        path : "/courses",
-        icon:'ri-home-line'
+        name: "Home",
+        path: "/courses",
+        icon: <FaHome />
     },
     {
-        name : "Teachers",
-        path : "/mycourses",
-        icon:'ri-home-line'
+        name: "Teachers",
+        path: "/mycourses",
+        icon: <FaChalkboardTeacher />
     },
     {
-        name : "Aprove-Teachers",
-        path : "/applications",
-        icon:'ri-home-line'
+        name: "Approve-Teachers",
+        path: "/applications",
+        icon: <FaCheckCircle />
     },
     {
-        name : "Logout",
-        path : "/logout",
-        icon:'ri-logout-box-line'
+        name: "Logout",
+        path: "/",
+        icon: <FaSignOutAlt />
     }
-]
+];
 
 export default adminMenu;

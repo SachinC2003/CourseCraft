@@ -1,24 +1,26 @@
-const teacherMenu =[
+import { FaHome, FaBookOpen, FaUpload, FaSignOutAlt } from 'react-icons/fa';
+
+const teacherMenu = [
     {
-        name : "Home",
-        path : "/courses",
-        icon:'ri-home-line'
+        name: "Home",
+        path: "/courses",
+        icon: <FaHome />
     },
     {
-        name : "Aploded-Courses",
-        path : "/mycourses",
-        icon:'ri-home-line'
+        name: "Aploded-Courses",
+        path: "/mycourses",
+        icon: <FaBookOpen />
     },
     {
-        name : "Aplode-course",
-        path : "/aplodecourse",
-        icon:'ri-home-line'
+        name: "Aplode-course",
+        path: "/aplodecourse",
+        icon: <FaUpload />
     },
     {
-        name : "Logout",
-        path : "/logout",
-        icon:'ri-logout-box-line'
+        name: "Logout",
+        path: "/",
+        icon: <FaSignOutAlt />
     }
-]
+];
 
 export default teacherMenu;

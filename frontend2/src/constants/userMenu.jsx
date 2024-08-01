@@ -1,23 +1,24 @@
+import { FaHome, FaChalkboardTeacher, FaBookOpen, FaSignOutAlt} from "react-icons/fa";
 const userMenu =[
     {
         name : "Home",
         path : "/courses",
-        icon:'ri-home-line'
+        icon: <FaHome />
     },
     {
         name : "My-Courses",
         path : "/mycourses",
-        icon:'ri-home-line'
+        icon:<FaBookOpen />
     },
     {
         name : "Applay Classes",
         path : "/applay",
-        icon:'ri-home-line'
+        icon:<FaChalkboardTeacher />
     },
     {
         name : "Logout",
-        path : "/logout",
-        icon:'ri-logout-box-line'
+        path : "/",
+        icon:<FaSignOutAlt />
     }
 ]
 

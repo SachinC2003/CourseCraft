@@ -84,7 +84,7 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/courses", Usermiddleware, async (req, res) => {
+router.get("/courses", authMiddleware, async (req, res) => {
   try {
     const allcourses = await Course.find();
     return res.status(201).send({ courses: allcourses });
