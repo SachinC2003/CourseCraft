@@ -34,7 +34,6 @@ const CourseSchema = new mongoose.Schema({
     title : String,
     description : String,
     price : Number,
-    owner : String,
     published : {type: Boolean , default : false}
 })
 

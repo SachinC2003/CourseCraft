@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import {toast} from 'react-toastify';
 import { useNavigate, Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { userAtom } from "../store/userAtom"; // Adjust the path if necessary
@@ -25,14 +26,16 @@ export default function Signup() {
           role: response.data.role 
         });
         console.log("User state set:", { userId: response.data.userId, role: response.data.role });
+        toast.success("Signup Successfully");
         navigate("/courses");
       } else {
         console.error("Authentication successful but token is missing in the response");
-        alert("Authentication successful, but there was an issue. Please try again.");
+        toast.error("Authentication successful, but there was an issue. Please try again.");
       }
     } catch (error) {
       console.error('Authentication error:', error.response ? error.response.data : error);
-      alert(error.response?.data?.msg || "An error occurred. Please try again.");
+      //alert(error.response?.data?.msg || "An error occurred. Please try again.");
+      toast.error("Failed to Signin");
     }
   };
 

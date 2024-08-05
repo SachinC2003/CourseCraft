@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {toast} from 'react-toastify';
 import { useRecoilValue } from "recoil";
 import InputBox from "../components/inputBox";
 import Button from "../components/button";
@@ -10,7 +11,6 @@ export default function UploadCourse() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
-    const [owner, setOwner] = useState("");
     const navigate = useNavigate();
     const user = useRecoilValue(userAtom);
 
@@ -40,12 +40,6 @@ export default function UploadCourse() {
                     onChange={e => setPrice(e.target.value)}
                     placeholder="Enter the course price"
                 />
-                <InputBox
-                    label="Owner"
-                    value={owner}
-                    onChange={e => setOwner(e.target.value)}
-                    placeholder="Enter the course owner"
-                />
             </div>
             <div className="mt-4 flex justify-center">
                 <Button
@@ -62,7 +56,7 @@ export default function UploadCourse() {
                             console.log("Token being sent:", token);
                             const response = await axios.post(
                                 "http://localhost:3000/teacher/aplodcourse",
-                                { title, description, price, owner },
+                                { title, description, price },
                                 { 
                                     headers: { 
                                         userId: user.userId,
@@ -72,10 +66,12 @@ export default function UploadCourse() {
                                 }
                             );
                             console.log('Upload response:', response.data);
+                            toast.success("Course Uplode Successfully")
                             navigate("/courses");
                         } catch (error) {
                             console.error('Upload error:', error.response ? error.response.data : error);
-                            alert(error.response?.data?.msg || "An error occurred while uploading the course. Please try again.");
+                            //alert(error.response?.data?.msg || "An error occurred while uploading the course. Please try again.");
+                            toast.error("Failed to Uplode Course")
                         }
                     }}
                 />

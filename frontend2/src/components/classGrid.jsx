@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios'
+import axios from 'axios';
 import ClassCard from "./classCard";
 
 export default function ClassGrid() {
@@ -11,56 +11,65 @@ export default function ClassGrid() {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-        setToken(storedToken);
+      setToken(storedToken);
     }
     fetchCourses(storedToken);
-}, []);
+  }, []);
 
-const fetchCourses = async (token) => {
+  const fetchCourses = async (token) => {
     try {
-        setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/user/courses', {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        if (Array.isArray(response.data.courses)) {
-            setCourses(response.data.courses);
-        } else {
-            console.error("Unexpected data format:", response.data);
-            setError("Received unexpected data format from the server.");
-        }
+      setIsLoading(true);
+      const response = await axios.get('http://localhost:3000/user/courses', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (Array.isArray(response.data.courses)) {
+        setCourses(response.data.courses);
+      } else {
+        console.error("Unexpected data format:", response.data);
+        setError("Received unexpected data format from the server.");
+      }
     } catch (error) {
-        console.error("Error fetching courses:", error);
-        setError("Failed to fetch courses. Please try again later.");
+      console.error("Error fetching courses:", error);
+      setError("Failed to fetch courses. Please try again later.");
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-};
+  };
 
-if (isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
-}
+  }
 
-if (error) {
+  if (error) {
     return <div>{error}</div>;
-}
+  }
 
-return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {courses.length > 0 ? (
-                courses.map((course) => (
-                    <ClassCard 
-                        key={course._id} 
-                        id={course._id}
-                        title={course.bio}
-                        description={course.qualifications}
-                        price={course.subjects}
-                        userId={course.user?._id}
-                        token={token}
-                    />
-                ))
-            ) : (
-                <div>No pending courses found.</div>
-            )}
-    </div>
+  return (
+    <div className="container mx-auto p-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <h1 className="font-bold text-2xl mb-4 col-span-1 md:col-span-2 lg:col-span-3">Courses</h1>
+    {courses.length > 0 ? (
+      courses.map((course) => (
+        <div className="flex justify-center">
+          <ClassCard 
+            key={course._id} 
+            id={course._id}
+            title={course.title}
+            description={course.description}
+            price={course.price}
+            published={course.published}
+          />
+        </div>
+      ))
+    ) : (
+      <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center h-64 text-xl">
+        No pending courses found.
+      </div>
+    )}
+  </div>
+</div>
+
+
   );
 }
+

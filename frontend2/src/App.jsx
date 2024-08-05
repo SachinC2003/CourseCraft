@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot, useSetRecoilState } from "recoil";
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
@@ -12,6 +14,7 @@ import MyCourses from "./pages/myCourses";
 import ApplicationGrid from "./components/applicationGrid";
 import { userAtom } from "./store/userAtom"
 import UploadCourse from "./pages/uplodeCourse";
+import Teachers from "./pages/teachers";
 
 function AppContent() {
   const setUser = useSetRecoilState(userAtom);
@@ -64,6 +67,7 @@ function AppContent() {
         <Route path="/applay" element={<Layout><Applay /></Layout>} />
         <Route path="/applications" element={<Layout><ApplicationGrid /></Layout>} />
         <Route path="/aplodecourse" element={<Layout><UploadCourse /></Layout>} />
+        <Route path="/teachers" element={<Layout><Teachers /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
@@ -73,6 +77,7 @@ function App() {
   return (
     <RecoilRoot>
       <AppContent />
+      <ToastContainer />
     </RecoilRoot>
   );
 }

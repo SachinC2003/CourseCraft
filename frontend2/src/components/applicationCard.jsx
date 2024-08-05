@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./button";
 import axios from "axios";
+import {toast} from "react-toastify"
 
 const ApplicationCard = (props) => {
     const handleApprove = async () => {
@@ -10,11 +11,12 @@ const ApplicationCard = (props) => {
                 headers: { Authorization: `Bearer ${props.token}` }
             });
             // You might want to add some feedback to the user here, like:
-            alert('Application approved successfully!');
-            // Or update the UI in some way
+            //alert('Application approved successfully!');
+            toast.success("Application approved successfully!")
         } catch (error) {
             console.error("Error approving application:", error);
-            alert('Failed to approve application. Please try again.');
+            //alert('Failed to approve application. Please try again.');
+            toast.error('Failed to approve application. Please try again.')
         }
     };
 

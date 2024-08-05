@@ -14,7 +14,7 @@ router.get("/courses", AdminMiddleware, async (req, res) => {
     }
 });
 
-router.get("/teachers", AdminMiddleware, async (req, res) => {
+router.get("/teachers",authMiddleware, AdminMiddleware, async (req, res) => {
     try {
         const allteachers = await Teacher.find();
         return res.status(201).send({ teachers: allteachers });
@@ -33,7 +33,7 @@ router.get("/applications", async (req, res) => {
     }
 });
 
-router.put("/approve/:id",authMiddleware, AdminMiddleware, async (req, res) => {
+router.put("/approve/:id",authMiddleware, async (req, res) => {
     const applicationId = req.params.id;
     try {
         const application = await Application.findById(applicationId).populate('user');

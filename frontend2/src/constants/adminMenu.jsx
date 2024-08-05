@@ -8,7 +8,7 @@ const adminMenu = [
     },
     {
         name: "Teachers",
-        path: "/mycourses",
+        path: "/teachers",
         icon: <FaChalkboardTeacher />
     },
     {

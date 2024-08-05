@@ -45,10 +45,13 @@ export default function ApplicationGrid() {
     }
 
     return (
-        <div className="grid grid-cols-3 gap-4">
-            {applications.length > 0 ? (
-                applications.map((application) => (
-                    <ApplicationCard 
+        <>
+            <div className="container mx-auto p-4">
+                <h1 className="font-bold text-2xl mb-4">Teacher's Applications</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {applications.length > 0 ? (
+                    applications.map((application) => (
+                        <ApplicationCard 
                         key={application._id} 
                         id={application._id}
                         bio={application.bio}
@@ -56,11 +59,15 @@ export default function ApplicationGrid() {
                         subjects={application.subjects}
                         userId={application.user?._id}
                         token={token}
-                    />
-                ))
-            ) : (
-                <div>No pending applications found.</div>
-            )}
-        </div>
+                        />
+                    ))
+                    ) : (
+                    <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex items-center justify-center h-64 text-xl">
+                        No pending applications found.
+                    </div>
+                    )}
+                </div>
+                </div>
+        </>
     );
 }

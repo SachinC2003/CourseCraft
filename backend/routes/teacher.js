@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 /*const bcrypt = require("bcryptjs") 
 const jwt = require("jsonwebtoken")*/
 
-const {Teacher, Course} = require("../db/index");
+const {Teacher, Course, User} = require("../db/index");
 const teacherMiddleware = require("../middleware/teacher")
 const authMiddleware = require("../middleware/authMiddleware")
 
@@ -19,37 +19,42 @@ router.get("/courses", teacherMiddleware, async(req, res)=>{
 })
 
 router.post("/aplodcourse", authMiddleware, async (req, res) => {
-    console.log("hii aplode");
-    const { title, description, price, owner } = req.body;
-    console.log(req.body);
-    if (!title || !description || !price || !owner) {
+    const { title, description, price } = req.body; 
+    if (!title || !description || !price) {
         return res.status(403).send({ msg: "Incomplete info of course" });
     }
 
     try {
-        // No need for new ObjectId, just validate or convert the ID as a string
-        const teacherId = req.user.userId;
-        const teacher = await Teacher.findById(teacherId);
+        const userId = req.user.userId;
+        const teacher = await Teacher.findOne({ user: userId });
         console.log('Teacher found:', teacher);
+
         if (!teacher) {
             return res.status(404).send({ msg: "Teacher not found" });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send({ msg: "User not found" });
         }
 
         const course = await Course.create({
             title: title,
             description: description,
             price: price,
-            owner: owner,
+            owner: user.username,  // Set owner to the teacher's username
         });
 
-        teacher.courses.push(course._id);
-        await teacher.save();
+        user.myCourses.push(course._id);
+        await user.save();
+
         return res.status(201).send({ msg: "Course created successfully" });
     } catch (error) {
         console.error("Error creating course:", error);
         return res.status(500).send({ msg: "Course not created", error: error });
     }
 });
+
 
 router.get("/mycourses", teacherMiddleware, async(req, res) =>{
     try{
