@@ -124,7 +124,6 @@ const Layout = ({ children }) => {
                 to={menu.path} 
                 className="block px-4 py-3 mb-4 hover:bg-indigo-700 transition duration-150 ease-in-out"
                 onClick={()=>{menu.name === 'Logout' ? handleLogout : undefined
-                     setCollapsed(true)
                 }}
               >
                 <div className="flex items-center">

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import ClassCard from "./classCard";
+import { useRecoilValue } from "recoil";
+import { userAtom } from "../store/userAtom";
 
 export default function ClassGrid() {
   const [courses, setCourses] = useState([]);
   const [token, setToken] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const user = useRecoilValue(userAtom);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -57,7 +60,7 @@ export default function ClassGrid() {
             title={course.title}
             description={course.description}
             price={course.price}
-            published={course.published}
+            role={user.role}
           />
         </div>
       ))

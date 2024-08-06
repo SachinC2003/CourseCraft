@@ -11,9 +11,10 @@ export default function Signup() {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userAtom);
 
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault(); // Prevent default form submission
     try {
-      const response = await axios.post("http://localhost:3000/user/signup", { // or /signup
+      const response = await axios.post("http://localhost:3000/user/signup", {
         username,
         password,
       });
@@ -34,8 +35,7 @@ export default function Signup() {
       }
     } catch (error) {
       console.error('Authentication error:', error.response ? error.response.data : error);
-      //alert(error.response?.data?.msg || "An error occurred. Please try again.");
-      toast.error("Failed to Signin");
+      toast.error("Failed to Signup");
     }
   };
 
@@ -45,32 +45,34 @@ export default function Signup() {
         <h1 className="font-bold text-4xl text-gray-800">Sign Up</h1>
         <p className="pt-2 text-gray-600">Enter Your Information To Create Account</p>
         <div className="border-t border-gray-300 my-4 w-full"></div>
-        <div className="pt-1 w-full">
-          <div className="flex justify-left font-bold text-gray-700">Email</div>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="abc@gmail.com"
-            className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="pt-3 pb-4 w-full">
-          <div className="flex justify-left font-bold text-gray-700">Password</div>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
-            className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <button
-          className="w-full rounded-lg bg-blue-600 text-white font-bold py-2 hover:bg-blue-700 transition-colors"
-          onClick={handleSignup}
-        >
-          Sign Up
-        </button>
+        <form onSubmit={handleSignup} className="w-full">
+          <div className="pt-1">
+            <div className="flex justify-left font-bold text-gray-700">Email</div>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="abc@gmail.com"
+              className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="pt-3 pb-4">
+            <div className="flex justify-left font-bold text-gray-700">Password</div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="password"
+              className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-blue-600 text-white font-bold py-2 hover:bg-blue-700 transition-colors"
+          >
+            Sign Up
+          </button>
+        </form>
         <p className="pt-4 text-gray-600">
           Already have an account? <Link to="/signin" className="text-blue-500 hover:underline">Sign In</Link>
         </p>

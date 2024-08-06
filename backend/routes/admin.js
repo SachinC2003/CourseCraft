@@ -62,4 +62,18 @@ router.put("/approve/:id",authMiddleware, async (req, res) => {
     }
 });
 
+router.put("/delete/:courseid", authMiddleware, async(req, res)=>{
+    const courseid = req.params.courseid
+    try{
+        const course = Course.findById(courseid)
+        if(!course){
+            return res.status(404).send({ msg: "course not found" });
+        }
+        await Course.findByIdAndDelete(courseid);
+
+    }catch(error){
+
+    }
+})
+
 module.exports = router;

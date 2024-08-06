@@ -93,7 +93,7 @@ router.get("/courses", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/bye/:courseid", Usermiddleware, async (req, res) => {
+router.post("/bye/:courseid", authMiddleware, async (req, res) => {
   const courseid = req.params.courseid;
   if (!courseid) {
     return res.status(403).send({ msg: "course id not found" });
@@ -104,20 +104,25 @@ router.post("/bye/:courseid", Usermiddleware, async (req, res) => {
     if (!course) {
       return res.status(403).send({ msg: "course with given id not found" });
     }
-
-    const user = await User.findById(req.user._id);
+    console.log(req.user)
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(403).send({ msg: "User not found" });
+    }
 
     if (user.myCourses.includes(course._id)) {
       return res.status(403).send({ msg: "course with given id exist" });
     }
 
     user.myCourses.push(course);
-    user.save();
+    await user.save(); // Make sure to wait for the save operation to complete
     return res.status(200).send({ message: "Course purchased successfully" });
   } catch (error) {
+    console.error("Error fetching course:", error); // Log the detailed error
     return res.status(500).send({ message: "Error fetching course" });
   }
 });
+
 
 router.get("/purchasedCourses", Usermiddleware, async (req, res) => {
   try {
