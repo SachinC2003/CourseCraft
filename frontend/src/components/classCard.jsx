@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PaymentPopup from "../components/paymentPopup"
-const ClassCard = ({ id, title, description, price, role }) => {
+const ClassCard = ({ id, title, description, price, enrollement, imageUrls, role }) => {
   const [token, setToken] = useState();
   const [showPopup, setShowPopup] = useState(false);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
@@ -67,15 +67,16 @@ const ClassCard = ({ id, title, description, price, role }) => {
       return (
         <div>
           <div className="mb-4">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT26MP9f5YdlTfN-2pikGFAXSyfPfT7l-wdhA&s"
-              alt="Course"
-              className="rounded-lg w-full h-40 object-cover"
-            />
+              <img
+                src={imageUrls[0] || "https://via.placeholder.com/150"}
+                alt="Course"
+                className="rounded-lg w-full h-40 object-cover"
+              />
           </div>
           <h2 className="text-lg font-bold mb-2">{title}</h2>
           <p className="text-gray-600 mb-2">Description: {description}</p>
           <p className="text-gray-600 mb-2">Price: {price} Rs</p>
+          <p className="text-gray-600 mb-2">Student Enrolled: {enrollement}</p>
           <button
             onClick={() =>{
               setShowPaymentPopup(true)
@@ -91,7 +92,7 @@ const ClassCard = ({ id, title, description, price, role }) => {
           <div>
             <div className="mb-4">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT26MP9f5YdlTfN-2pikGFAXSyfPfT7l-wdhA&s"
+                src={imageUrls[0] || "https://via.placeholder.com/150"}
                 alt="Course"
                 className="rounded-lg w-full h-40 object-cover"
               />
@@ -99,7 +100,7 @@ const ClassCard = ({ id, title, description, price, role }) => {
             <h2 className="text-lg font-bold mb-2">{title}</h2>
             <p className="text-gray-600 mb-2">Description: {description}</p>
             <p className="text-gray-600 mb-2">Price: {price} Rs</p>
-            <p className="text-gray-600 mb-2">Students Enrolled: [Number]</p>
+            <p className="text-gray-600 mb-2">Student Enrolled: {enrollement}</p>
             <button
               onClick={() => {/* Implement class management logic */}}
               className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 mr-2"
@@ -113,7 +114,7 @@ const ClassCard = ({ id, title, description, price, role }) => {
           <div>
             <div className="mb-4">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT26MP9f5YdlTfN-2pikGFAXSyfPfT7l-wdhA&s"
+                src={imageUrls[0] || "https://via.placeholder.com/150"}
                 alt="Course"
                 className="rounded-lg w-full h-40 object-cover"
               />
@@ -121,6 +122,7 @@ const ClassCard = ({ id, title, description, price, role }) => {
             <h2 className="text-lg font-bold mb-2">{title}</h2>
             <p className="text-gray-600 mb-2">Description: {description}</p>
             <p className="text-gray-600 mb-2">Price: {price} Rs</p>
+            <p className="text-gray-600 mb-2">Student Enrolled: {enrollement}</p>
             <button
               onClick={async() => {
                 try{
@@ -148,11 +150,11 @@ const ClassCard = ({ id, title, description, price, role }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 h-auto w-80">
       <div className="mb-4">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT26MP9f5YdlTfN-2pikGFAXSyfPfT7l-wdhA&s"
-          alt="Course"
-          className="rounded-lg w-full h-40 object-cover"
-        />
+              <img
+                src={imageUrls[0] || "https://via.placeholder.com/150"}
+                alt="Course"
+                className="rounded-lg w-full h-40 object-cover"
+              />
       </div>
       <h2 className="text-lg font-bold mb-2">{title}</h2>
       <p className="text-gray-600 mb-2 pt-1">{price} Rs</p>

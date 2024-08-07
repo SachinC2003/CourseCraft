@@ -33,7 +33,7 @@ const LandingPage = () => {
 
       <main className="container mx-auto mt-10 p-4">
         <section className="flex flex-col md:flex-row justify-between items-center">
-          <img src="abc.png" alt="Side Image 1" className="w-full md:w-1/4 h-64 rounded-lg shadow-lg mb-4 md:mb-0" />
+          <img src="image.png" alt="Side Image 1" className="w-full md:w-1/4 h-64 rounded-lg shadow-lg mb-4 md:mb-0" />
           <div className="text-center mx-4 md:w-1/2">
             <h2 className="text-4xl font-bold text-gray-800">Welcome to CourseCraft</h2>
             <p className="mt-4 text-gray-600">
@@ -42,7 +42,7 @@ const LandingPage = () => {
             </p>
             <a href="#features" className="mt-8 inline-block bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600">Learn More</a>
           </div>
-          <img src="path-to-your-image2.jpg" alt="Side Image 2" className="w-full md:w-1/4 h-64 rounded-lg shadow-lg mt-4 md:mt-0" />
+          <img src="image2.jpg" alt="Side Image 2" className="w-full md:w-1/4 h-64 rounded-lg shadow-lg mt-4 md:mt-0" />
         </section>
 
         <section id="features" className="mt-20">

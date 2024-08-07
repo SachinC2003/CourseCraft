@@ -60,6 +60,8 @@ export default function ClassGrid() {
             title={course.title}
             description={course.description}
             price={course.price}
+            enrollement={course.enrollement}
+            imageUrls={course.imageUrls}
             role={user.role}
           />
         </div>

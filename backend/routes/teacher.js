@@ -3,6 +3,10 @@ const router = Router();
 const mongoose = require('mongoose');
 /*const bcrypt = require("bcryptjs") 
 const jwt = require("jsonwebtoken")*/
+const multer = require('multer');
+const cloudinary = require('../config/cloudinary');
+/*------------------------------------------------------------------*/
+const upload = multer({ storage: multer.memoryStorage() });
 
 const {Teacher, Course, User} = require("../db/index");
 const teacherMiddleware = require("../middleware/teacher")
@@ -18,8 +22,17 @@ router.get("/courses", teacherMiddleware, async(req, res)=>{
     }
 })
 
-router.post("/aplodcourse", authMiddleware, async (req, res) => {
-    const { title, description, price } = req.body; 
+router.post("/aplodcourse", authMiddleware, upload.array('images', 5), async (req, res) => {
+    const { title, description, price } = req.body;
+
+    // Check if at least 2 images were uploaded
+    if (!req.files || req.files.length < 2) {
+        return res.status(400).json({
+            status: 400,
+            message: 'Bad Request: At least 2 image files are required.'
+        });
+    }
+
     if (!title || !description || !price) {
         return res.status(403).send({ msg: "Incomplete info of course" });
     }
@@ -27,7 +40,6 @@ router.post("/aplodcourse", authMiddleware, async (req, res) => {
     try {
         const userId = req.user.userId;
         const teacher = await Teacher.findOne({ user: userId });
-        console.log('Teacher found:', teacher);
 
         if (!teacher) {
             return res.status(404).send({ msg: "Teacher not found" });
@@ -38,11 +50,25 @@ router.post("/aplodcourse", authMiddleware, async (req, res) => {
             return res.status(404).send({ msg: "User not found" });
         }
 
+        const imageUploadPromises = req.files.map(file => {
+            return new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(result.secure_url);
+                    }
+                }).end(file.buffer);
+            });
+        });
+
+        const imageUrls = await Promise.all(imageUploadPromises);
+
         const course = await Course.create({
             title: title,
             description: description,
             price: price,
-            owner: user.username,  // Set owner to the teacher's username
+            imageUrls: imageUrls
         });
 
         user.myCourses.push(course._id);
@@ -51,9 +77,10 @@ router.post("/aplodcourse", authMiddleware, async (req, res) => {
         return res.status(201).send({ msg: "Course created successfully" });
     } catch (error) {
         console.error("Error creating course:", error);
-        return res.status(500).send({ msg: "Course not created", error: error });
+        return res.status(500).send({ msg: "Course not created", error });
     }
 });
+
 
 
 router.get("/mycourses", teacherMiddleware, async(req, res) =>{

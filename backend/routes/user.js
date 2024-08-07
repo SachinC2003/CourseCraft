@@ -113,7 +113,8 @@ router.post("/bye/:courseid", authMiddleware, async (req, res) => {
     if (user.myCourses.includes(course._id)) {
       return res.status(403).send({ msg: "course with given id exist" });
     }
-
+    course.enrollement = (parseInt(course.enrollement) || 0) + 1; // Ensure enrollment is a number
+    await course.save();
     user.myCourses.push(course);
     await user.save(); // Make sure to wait for the save operation to complete
     return res.status(200).send({ message: "Course purchased successfully" });

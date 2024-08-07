@@ -30,12 +30,15 @@ const ApplicationSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: Date.now },
   });
 
-const CourseSchema = new mongoose.Schema({
-    title : String,
-    description : String,
-    price : Number,
-    published : {type: Boolean , default : false}
-})
+  const CourseSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    imageUrls: [String],
+    enrollement: { type: String, default: "0" },
+    published: { type: Boolean, default: false }
+});
+
 
 const User = mongoose.model("User", UserSchema);
 const Teacher = mongoose.model("Teacher", TeacherSchema);
