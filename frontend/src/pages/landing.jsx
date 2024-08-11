@@ -10,9 +10,6 @@ const LandingPage = () => {
             <h1 className="text-xl font-bold text-gray-800">CourseCraft</h1>
           </div>
           <ul className="flex space-x-4">
-            <li><a href="#features" className="text-gray-600 hover:text-gray-800">Features</a></li>
-            <li><a href="#about" className="text-gray-600 hover:text-gray-800">About</a></li>
-            <li><a href="#contact" className="text-gray-600 hover:text-gray-800">Contact</a></li>
             <li>
               <Link to="/signin">
                 <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">

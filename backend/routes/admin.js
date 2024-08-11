@@ -62,18 +62,34 @@ router.put("/approve/:id",authMiddleware, async (req, res) => {
     }
 });
 
-router.put("/delete/:courseid", authMiddleware, async(req, res)=>{
-    const courseid = req.params.courseid
-    try{
-        const course = Course.findById(courseid)
-        if(!course){
-            return res.status(404).send({ msg: "course not found" });
+router.delete("/course/:id", authMiddleware, async (req, res) => {
+    const courseId = req.params.id;
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ msg: "Course not found" });
         }
-        await Course.findByIdAndDelete(courseid);
-
-    }catch(error){
-
+        await Course.findByIdAndDelete(courseId);
+        res.status(200).json({ msg: "Course deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting course:", error);
+        res.status(500).json({ msg: "Server error" });
     }
-})
+});
+
+router.delete("/teacher/:teacherId", authMiddleware, async (req, res) => {
+    const teacherId = req.params.teacherId;
+    try {
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).json({ msg: "Teacher not found" });
+        }
+        await Teacher.findByIdAndDelete(teacherId);
+        res.status(200).json({ msg: "Teacher deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting teacher:", error);
+        res.status(500).json({ msg: "Server error" });
+    }
+});
 
 module.exports = router;

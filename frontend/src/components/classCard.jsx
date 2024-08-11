@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import PaymentPopup from "../components/paymentPopup"
 const ClassCard = ({ id, title, description, price, enrollement, imageUrls, role }) => {
   const [token, setToken] = useState();
@@ -29,15 +30,6 @@ const ClassCard = ({ id, title, description, price, enrollement, imageUrls, role
           className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
         >
           Enroll Now
-        </button>
-      );
-    case 'teacher':
-      return (
-        <button
-          onClick={openPopup}
-          className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
-        >
-          Update
         </button>
       );
     case 'admin':
@@ -101,12 +93,7 @@ const ClassCard = ({ id, title, description, price, enrollement, imageUrls, role
             <p className="text-gray-600 mb-2">Description: {description}</p>
             <p className="text-gray-600 mb-2">Price: {price} Rs</p>
             <p className="text-gray-600 mb-2">Student Enrolled: {enrollement}</p>
-            <button
-              onClick={() => {/* Implement class management logic */}}
-              className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 mr-2"
-            >
-              Manage Students
-            </button>
+            
           </div>
         );
       case 'admin':
@@ -126,8 +113,7 @@ const ClassCard = ({ id, title, description, price, enrollement, imageUrls, role
             <button
               onClick={async() => {
                 try{
-                  await axios.put(`http://localhost:3000/admin/delete/${id}`,
-                    {},
+                  await axios.delete(`http://localhost:3000/admin/course/${id}`,
                     {
                       headers :{ Authorization: `Bearer ${token}` }
                     }

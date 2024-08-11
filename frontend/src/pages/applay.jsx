@@ -19,8 +19,8 @@ export default function Applay() {
     }, [user]);
 
     return (
-        <div className="p-4 md:p-10">
-            <h2 className="font-bold text-2xl md:text-3xl mb-6">Apply For Classes</h2>
+        <div className=" md:p-1">
+            <h2 className="font-bold text-2xl mb-4 col-span-1 md:col-span-2 lg:col-span-3">Apply For Classes</h2>
             <div className="bg-slate-300 p-4 md:p-8 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputBox
                     label="Bio"

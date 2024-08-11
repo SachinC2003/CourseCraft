@@ -10,12 +10,9 @@ const ApplicationCard = (props) => {
             await axios.put(`http://localhost:3000/admin/approve/${props.id}`, {}, {
                 headers: { Authorization: `Bearer ${props.token}` }
             });
-            // You might want to add some feedback to the user here, like:
-            //alert('Application approved successfully!');
             toast.success("Application approved successfully!")
         } catch (error) {
             console.error("Error approving application:", error);
-            //alert('Failed to approve application. Please try again.');
             toast.error('Failed to approve application. Please try again.')
         }
     };

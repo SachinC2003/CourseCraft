@@ -40,41 +40,37 @@ export default function ClassGrid() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="flex justify-center items-center h-screen">{error}</div>;
   }
 
   return (
-    <div className="container mx-auto p-4">
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <h1 className="font-bold text-2xl mb-4 col-span-1 md:col-span-2 lg:col-span-3">Courses</h1>
-    {courses.length > 0 ? (
-      courses.map((course) => (
-        <div className="flex justify-center">
-          <ClassCard 
-            key={course._id} 
-            id={course._id}
-            title={course.title}
-            description={course.description}
-            price={course.price}
-            enrollement={course.enrollement}
-            imageUrls={course.imageUrls}
-            role={user.role}
-          />
+    <div className="container mx-auto p-4 min-h-screen">
+      <h1 className="font-bold text-2xl mb-4">Courses</h1>
+      {courses.length === 0 ? (
+        <div className="flex items-center justify-center h-[calc(100vh-200px)] text-xl">
+          Failed to fetch courses. Please try again later.
         </div>
-      ))
-    ) : (
-      <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center h-64 text-xl">
-        No pending courses found.
-      </div>
-    )}
-  </div>
-</div>
-
-
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {courses.map((course) => (
+            <div key={course._id} className="flex justify-center">
+              <ClassCard 
+                id={course._id}
+                title={course.title}
+                description={course.description}
+                price={course.price}
+                enrollement={course.enrollement}
+                imageUrls={course.imageUrls}
+                role={user.role}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
-
