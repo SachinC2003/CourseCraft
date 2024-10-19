@@ -146,7 +146,7 @@ export default function UploadCourse() {
             const token = localStorage.getItem('token');
             console.log("Token being sent:", token);
             const response = await axios.post(
-                "${import.meta.env.VITE_BACKEND_URL}/teacher/aplodcourse",
+                `${import.meta.env.VITE_BACKEND_URL}/teacher/aplodcourse`,
                 formData,
                 { 
                     headers: { 

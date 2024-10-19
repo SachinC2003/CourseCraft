@@ -14,7 +14,7 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault(); // Prevent default form submission
     try {
-      const response = await axios.post("${import.meta.env.VITE_BACKEND_URL}/user/signup", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, {
         username,
         password,
       });
