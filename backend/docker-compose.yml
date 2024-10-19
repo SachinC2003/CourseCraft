@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - backend-network
+
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: express-backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://root:example@mongo:27017/udimi?authSource=admin
+      SECRET_KEY: sachin
+      CLOUDINARY_CLOUD_NAME: dllnxlifg
+      CLOUDINARY_API_KEY: 288343836786286
+      CLOUDINARY_API_SECRET: -emzdk9PSqCKjCMyZByHjePkR-0
+    depends_on:
+      - mongo
+    networks:
+      - backend-network
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  backend-network:
+    driver: bridge

@@ -9,7 +9,7 @@ const teacherRoute = require('./routes/teacher');
 const userRoute = require('./routes/user')
 const adminRoute = require('./routes/admin')
 app.use(cors({
-    origin: 'http://localhost:5173' // Replace with your frontend's origin
+    origin: '*' // Replace with your frontend's origin
   }));
 
 const PORT = 3000;
