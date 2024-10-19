@@ -7,7 +7,7 @@ const ApplicationCard = (props) => {
     const handleApprove = async () => {
         try {
             console.log(props)
-            await axios.put(`http://localhost:3000/admin/approve/${props.id}`, {}, {
+            await axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/approve/${props.id}`, {}, {
                 headers: { Authorization: `Bearer ${props.token}` }
             });
             toast.success("Application approved successfully!")

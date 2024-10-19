@@ -19,7 +19,7 @@ export default function ApplicationGrid() {
     const fetchApplications = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.get('http://localhost:3000/admin/applications',{}, {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/applications`,{}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (Array.isArray(response.data)) {

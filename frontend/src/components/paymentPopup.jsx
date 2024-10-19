@@ -9,7 +9,7 @@ const PaymentPopup = ({ onClose, courseId, price, token }) => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-                `http://localhost:3000/user/bye/${courseId}`,
+                `${import.meta.env.VITE_BACKEND_URL}/user/bye/${courseId}`,
                 {}, // Request body (empty in this case)
                 {
                     headers: { Authorization: `Bearer ${token}` }

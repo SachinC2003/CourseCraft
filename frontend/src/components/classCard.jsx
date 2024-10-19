@@ -113,7 +113,7 @@ const ClassCard = ({ id, title, description, price, enrollement, imageUrls, role
             <button
               onClick={async() => {
                 try{
-                  await axios.delete(`http://localhost:3000/admin/course/${id}`,
+                  await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/admin/course/${id}`,
                     {
                       headers :{ Authorization: `Bearer ${token}` }
                     }

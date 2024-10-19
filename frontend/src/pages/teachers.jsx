@@ -22,7 +22,7 @@ function Teachers() {
 
   const handleDelete = async (teacherId) => {
     try {
-      await axios.delete(`http://localhost:3000/admin/teacher/${teacherId}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/admin/teacher/${teacherId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTeachers((prevTeachers) => prevTeachers.filter(teacher => teacher._id !== teacherId));
@@ -35,7 +35,7 @@ function Teachers() {
   const fetchTeachers = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:3000/admin/teachers', {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/teachers`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('Response data:', response.data);

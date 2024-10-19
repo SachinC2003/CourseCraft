@@ -22,7 +22,7 @@ export default function ClassGrid() {
   const fetchCourses = async (token) => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:3000/user/courses', {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/courses`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (Array.isArray(response.data.courses)) {

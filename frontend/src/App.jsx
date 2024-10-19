@@ -19,12 +19,14 @@ import Teachers from "./pages/teachers";
 function AppContent() {
   const setUser = useSetRecoilState(userAtom);
   const [isLoading, setIsLoading] = useState(true);
+  console.log(import.meta.env)
+  console.log(import.meta.env.VITE_BACKEND_URL)
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     console.log("Token from localStorage:", token); // Log the token
     if (token) {
-      axios.get('http://localhost:3000/user/me', {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

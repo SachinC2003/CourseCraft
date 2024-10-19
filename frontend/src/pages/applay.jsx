@@ -55,7 +55,7 @@ export default function Applay() {
                             const token = localStorage.getItem('token');
                             console.log("Token being sent:", token);
                             const response = await axios.post(
-                                "http://localhost:3000/user/applay",
+                                "${import.meta.env.VITE_BACKEND_URL}/user/applay",
                                 { bio, qualifications, subject },
                                 { 
                                     headers: { 
