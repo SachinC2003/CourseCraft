@@ -8,9 +8,13 @@ const app = express();
 const teacherRoute = require('./routes/teacher');
 const userRoute = require('./routes/user')
 const adminRoute = require('./routes/admin')
-app.use(cors({
-    origin: '*' // Replace with your frontend's origin
-  }));
+
+const corsOptions = {
+  origin: '*', 
+  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 const PORT = 3000;
 
