@@ -6,14 +6,15 @@
     "rewrites": [
       { "source": "/(.*)", "destination": "/src/index.js" }
     ],
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-          { "key": "Access-Control-Allow-Origin", "value": "*" },
-          { "key": "Access-Control-Allow-Methods", "value": "GET,HEAD,PUT,PATCH,POST,DELETE" },
-          { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With,Content-Type,Accept" }
-        ]
-      }  
-    ]
+   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "https://course-craft-client.vercel.app" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,HEAD,PUT,PATCH,POST,DELETE" },
+        { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With,Content-Type,Accept,Authorization" },
+        { "key": "Access-Control-Allow-Credentials", "value": "true" }
+      ]
+    }  
+  ]
   }
