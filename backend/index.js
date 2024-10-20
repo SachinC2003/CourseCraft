@@ -23,6 +23,9 @@ app.options('*', cors(corsOptions));
 const PORT = 3000;
 
 app.use(bodyParser.json());
+app.get('/', (req, res) => {
+  res.json({ message: 'CORS test successful' });
+});
 app.use('/teacher', teacherRoute);
 app.use("/user", userRoute);
 app.use("/admin", adminRoute);
