@@ -11,7 +11,7 @@ const adminRoute = require('./routes/admin')
 
 // 1. Update Express CORS setup
 const corsOptions = {
-  origin: 'https://course-craft-client.vercel.app',
+  origin: true,
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   credentials: true,
   optionsSuccessStatus: 204
