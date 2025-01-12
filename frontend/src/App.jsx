@@ -15,6 +15,8 @@ import ApplicationGrid from "./components/applicationGrid";
 import { userAtom } from "./store/userAtom"
 import UploadCourse from "./pages/uplodeCourse";
 import Teachers from "./pages/teachers";
+import ProtectedRoute from "./components/protectedRoute";
+
 
 function AppContent() {
   const setUser = useSetRecoilState(userAtom);
@@ -64,12 +66,57 @@ function AppContent() {
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/mycourses" element={<Layout><MyCourses /></Layout>} />
-        <Route path="/courses" element={<Layout><Courses /></Layout>} />
-        <Route path="/applay" element={<Layout><Applay /></Layout>} />
-        <Route path="/applications" element={<Layout><ApplicationGrid /></Layout>} />
-        <Route path="/aplodecourse" element={<Layout><UploadCourse /></Layout>} />
-        <Route path="/teachers" element={<Layout><Teachers /></Layout>} />
+
+
+        {/*************************** * Protected Routes *********************/}
+        <Route
+          path="/mycourses"
+          element={
+            <ProtectedRoute allowedRoles={["user", "teacher", "admin"]}>
+              <Layout><MyCourses /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute allowedRoles={["user", "teacher", "admin"]}>
+              <Layout><Courses /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/applay"
+          element={
+            <ProtectedRoute allowedRoles={["user", "teacher"]}>
+              <Layout><Applay /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/applications"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Layout><ApplicationGrid /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/aplodecourse"
+          element={
+            <ProtectedRoute allowedRoles={["teacher", "admin"]}>
+              <Layout><UploadCourse /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teachers"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Layout><Teachers /></Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

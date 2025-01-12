@@ -4,6 +4,15 @@ import {toast} from 'react-toastify';
 import { useNavigate, Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { userAtom } from "../store/userAtom"; // Adjust the path if necessary
+import {z} from "zod";
+
+const zodSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+})
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -13,6 +22,22 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault(); // Prevent default form submission
+
+     // Validate inputs with Zod schema
+  const validation = zodSchema.safeParse({ email: username, password });
+
+  if (!validation.success) {
+    const errorMessages = validation.error.errors.reduce((acc, curr) => {
+      if (curr.path[0] === "email") acc.email = curr.message;
+      if (curr.path[0] === "password") acc.password = curr.message;
+      return acc;
+    }, {});
+
+    if (errorMessages.email) toast.error(`Email Error: ${errorMessages.email}`);
+    if (errorMessages.password) toast.error(`Password Error: ${errorMessages.password}`);
+    return;
+  }
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, {
         username,
