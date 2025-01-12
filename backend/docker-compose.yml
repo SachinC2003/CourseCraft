@@ -31,6 +31,20 @@ services:
       - mongo
     networks:
       - backend-network
+  
+  frontend:
+    build: 
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_BACKEND_URL: http://localhost:3000  # Updated to use 'backend' service
+    depends_on:
+      - backend
+    networks:
+      - backend-network
 
 volumes:
   mongo-data:

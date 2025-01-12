@@ -135,38 +135,49 @@ router.get("/purchasedCourses", Usermiddleware, async (req, res) => {
 });
 
 router.post("/applay", authMiddleware, async (req, res) => {
-  console.log('Received request at /applay');
-  console.log('Request headers:', req.headers);
-  console.log('Request body:', req.body);
-  console.log('User from middleware:', req.user);
+  console.log("Received request at /applay");
+  console.log("Request headers:", req.headers);
+  console.log("Request body:", req.body);
+  console.log("User from middleware:", req.user);
 
-  const { bio, qualifications, subject } = req.body;
+  const { grade, qualifications, subjects, experience,languages } = req.body; // Updated fields
   const userId = req.user.userId; // Get userId from the authenticated user
 
-  if (!bio || !qualifications || !subject) {
+  // Validate required fields
+  /*if (!grade || !qualifications || !subjects || experience ) {
     return res.status(400).send({ msg: "All fields are required" });
-  }
+  }*/
 
   try {
+    // Check if a teacher application already exists for the user
     const teacher = await Teacher.findOne({ user: userId });
     if (teacher) {
-      return res.status(409).send({ msg: "Teacher application already exists for this user" });
+      return res
+        .status(409)
+        .send({ msg: "Teacher application already exists for this user" });
     }
 
-    const newTeacher = await Application.create({
+    // Create a new teacher application
+    const newTeacher = await Teacher.create({
       user: userId,
-      bio,
+      grade,
       qualifications,
-      subject,
-      status: "pending"
+      subjects, // This should be an array
+      experience,
+      languages
     });
 
-    console.log('Teacher application created successfully');
-    return res.status(201).send({ msg: "Applied for teacher successfully" });
+    console.log("Teacher application created successfully");
+    return res
+      .status(201)
+      .send({ msg: "Applied for teacher successfully", teacher: newTeacher });
   } catch (error) {
-    console.error('Error in /applay route:', error);
-    return res.status(500).send({ msg: "Teacher application failed", error: error.message });
+    console.error("Error in /applay route:", error);
+    return res
+      .status(500)
+      .send({ msg: "Teacher application failed", error: error.message });
   }
 });
+
 
 module.exports = router;
